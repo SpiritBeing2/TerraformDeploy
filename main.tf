@@ -119,13 +119,6 @@ resource "aws_instance" "my_vm" {
   subnet_id = aws_subnet.subnet_kaggle.id
   key_name      = aws_key_pair.example.key_name
   vpc_security_group_ids = [aws_security_group.example.id]
-  instance_market_options {
-    market_type = "spot"
-    spot_options {
-     max_price = "4"
-     spot_instance_type = "one-time"
-     }
-  }
   user_data  = var.user_data_script
   tags = {
     Name = var.name_tag
