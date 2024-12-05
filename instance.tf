@@ -23,6 +23,13 @@ resource "aws_instance" "my_vm" {
   tags = {
     Name = var.name_tag
   }
+  instance_market_options {
+    market_type = "spot"
+    spot_options {
+      max_price = "3" # Remplacez par votre prix maximum
+      spot_instance_type = "one-time"
+    }
+  }
 }
 
 output "ec2_user_data" {
