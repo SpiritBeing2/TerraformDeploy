@@ -1,19 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
-# Generate a new SSH private key
-resource "tls_private_key" "example" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
-
-# Create an AWS key pair using the generated public key
-resource "aws_key_pair" "example" {
-  key_name   = "example-key-pair"
-  public_key = tls_private_key.example.public_key_openssh
-}
-
 # Create a VPC
 resource "aws_vpc" "vpc_kaggle" {
   cidr_block = "10.0.0.0/16"
@@ -102,34 +86,5 @@ resource "aws_security_group" "example" {
     Name = "KaggleSecurityGroup"
   }
 }
-
-variable "user_data_script" {
-  type = string
-  description = "Startup script to deploy juptyer"
-  default = <<-EOF
-            #!/bin/bash
-            mkdir ~/.jupyter
-            echo "c.NotebookApp.ip = '*'" >> ~/.jupyter/jupyter_notebook_config.py
-            EOF
-}
-
-resource "aws_instance" "my_vm" {
-  ami           = var.ami
-  instance_type = var.instance_type
-  subnet_id = aws_subnet.subnet_kaggle.id
-  key_name      = aws_key_pair.example.key_name
-  vpc_security_group_ids = [aws_security_group.example.id]
-  user_data  = var.user_data_script
-  tags = {
-    Name = var.name_tag
-  }
-}
-
-output "ec2_user_data" {
-  value = var.user_data_script
-  description = "User data output"
-}
-
-
 
 

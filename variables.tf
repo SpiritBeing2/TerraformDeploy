@@ -18,6 +18,17 @@ variable "region" {
   description = "AWS Region"
 }
 
+variable "bucket_name" {
+  type        = string
+  description = "Bucket containing training data"
+  sensitive = true
+}
+
+variable "parameter_name" {
+  type 	      = string
+  description = "Parameters store containing bucket name"
+}
+
 output "public_ip" {
   value       = aws_instance.my_vm.public_ip
   description = "Public IP Address of EC2 instance"
